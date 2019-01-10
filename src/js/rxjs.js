@@ -1,8 +1,15 @@
-import { createStore } from 'redux';
-import githubApp from '../reducer/reducer';
-import { refreshList, refreshUser1, refreshUser2, refreshUser3 } from '../action/action';
+import store from '../store/createStore';
+import { addUserAction } from '../store/action';
 
-const store = createStore(githubApp);
+const dummyUser = {
+  login: 'Vladimir',
+  avatarUrl: '#',
+  htmlUrl: '#',
+  name: 'qqqz',
+  location: 'qsdfa',
+  email: 'asda',
+  id: 20,
+};
 
 const countUsersList = 3;
 const randomNumber = a => Math.floor(Math.random() * a);
@@ -30,16 +37,52 @@ function renderBlock(avatar, name, location, email) {
 }
 
 $(document).ready(() => {
-   $('#usersBlock').on('click', '.arrow', function (event) {
+  function loadStore() {
+    const currentState = store.getState();
+    console.log('currentState', currentState);
+    currentState.userData.forEach(({ name, email, location }) => {
+      renderBlock(null, name, email, location);
+    });
+  }
+  function addItem() {
+    store.dispatch({ type: 'ADD_USER', payload: dummyUser });
+  }
+
+  function deleteItem() {
+    store.dispatch({ type: 'DELETE_USER', payload: 20 });
+  }
+
+  addItem();
+  loadStore();
+
+  function addUser(){
+    store.dispatch(addUserAction());
+
+  }
+    addUser();
+  $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
-    $(this).parent().siblings('.main__user-block-trash').toggle('not-active');
-    $(this).parent().siblings('img').toggle('.margin-left');
-    $currentId = $(this).parent().parent().prop('id');
-    console.log($currentId);
+    $(this)
+      .parent()
+      .siblings('.main__user-block-trash')
+      .toggle('not-active');
+    $(this)
+      .parent()
+      .siblings('img')
+      .toggle('.margin-left');
   });
   $('#usersBlock').on('click', '.trash', function (event) {
     event.preventDefault();
-    $(this).parent().parent().remove();
-    console.log($(this).parent().parent().prop('id'));
+    $(this)
+      .parent()
+      .parent()
+      .remove();
+    console.log(
+      $(this)
+        .parent()
+        .parent()
+        .prop('id'),
+    );
   });
+  store.subscribe(loadStore);
 });
