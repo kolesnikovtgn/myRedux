@@ -1,11 +1,11 @@
-const Rx = require('rxjs/Rx');
-// eslint-disable-next-line prefer-destructuring
-const map = require('rxjs/operators/map').map;
-// eslint-disable-next-line prefer-destructuring
-const mergeMap = require('rxjs/operators/mergeMap').mergeMap;
-// eslint-disable-next-line prefer-destructuring
+import { createStore } from 'redux';
+import githubApp from '../reducer/reducer';
+import { refreshList, refreshUser1, refreshUser2, refreshUser3 } from '../action/action';
+
+const store = createStore(githubApp);
 
 const countUsersList = 3;
+const randomNumber = a => Math.floor(Math.random() * a);
 const userTemplate = (avatar, name, location, email) => ` 
 <div class="main__user-block container-row">
   <img class="main__user-block-avatar" src="${avatar}">
@@ -30,81 +30,16 @@ function renderBlock(avatar, name, location, email) {
 }
 
 $(document).ready(() => {
-  const refreshButton = $('.refresh');
-  const refreshClick$ = Rx.Observable.fromEvent(refreshButton, 'click');
-  const arrowClick$ = Rx.Observable.fromEventPattern(
-    (handler) => {
-      $('#usersBlock').on('click', '.arrow', handler);
-    },
-    (handler) => {
-      $('#usersBlock').off('click', '.arrow', handler);
-    },
-  );
-
-  const trashClick$ = Rx.Observable.fromEventPattern(
-    (handler) => {
-      $('#usersBlock').on('click', '.trash', handler);
-    },
-    (handler) => {
-      $('#usersBlock').off('click', '.trash', handler);
-    },
-  );
-
-  arrowClick$.subscribe((e) => {
-    $(e.target).parent().siblings('.main__user-block-trash')
-      .toggle('not-active');
-    $(e.target).parent().siblings('img')
-      .toggle('.margin-left');
+   $('#usersBlock').on('click', '.arrow', function (event) {
+    event.preventDefault();
+    $(this).parent().siblings('.main__user-block-trash').toggle('not-active');
+    $(this).parent().siblings('img').toggle('.margin-left');
+    $currentId = $(this).parent().parent().prop('id');
+    console.log($currentId);
   });
-
-  trashClick$.subscribe((e) => {
-    $(e.target).parent().parent().remove();
-  });
-
-  const requestTrash$ = trashClick$.pipe(
-    map(() => {
-      const randomNumber = Math.floor(Math.random() * 500);
-      return ` https://api.github.com/users?since=${randomNumber}`;
-    }),
-  );
-  const responseTrash$ = requestTrash$.pipe(
-    mergeMap(requestUrl => Rx.Observable.fromPromise($.getJSON(requestUrl))),
-    map((listUsers) => {
-      const renderUsersList = [];
-      for (let i = 0; i < 1; i += 1) {
-        renderUsersList.push(listUsers[Math.floor(Math.random() * listUsers.length)]);
-      }
-      return renderUsersList;
-    }),
-  );
-
-  responseTrash$.subscribe((res) => {
-    res.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.id);
-    });
-  });
-
-  const request$ = refreshClick$.startWith('startup click')
-    .map(() => {
-      const randomNumber = Math.floor(Math.random() * 500);
-      return `https://api.github.com/users?since=${randomNumber}`;
-    });
-
-  const response$ = request$.pipe(
-    mergeMap(requestUrl => Rx.Observable.fromPromise($.getJSON(requestUrl))),
-    map((listUsers) => {
-      const renderUsersList = [];
-      for (let i = 0; i < countUsersList; i += 1) {
-        renderUsersList.push(listUsers[Math.floor(Math.random() * listUsers.length)]);
-      }
-      return renderUsersList;
-    }),
-  );
-
-  response$.subscribe((res) => {
-    $('#usersBlock').empty();
-    res.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.id);
-    });
+  $('#usersBlock').on('click', '.trash', function (event) {
+    event.preventDefault();
+    $(this).parent().parent().remove();
+    console.log($(this).parent().parent().prop('id'));
   });
 });
