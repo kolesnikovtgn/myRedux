@@ -23,7 +23,7 @@ export const addUserAction = payload => (dispatch, getState) => $.ajax({
   // };
   const userData = JSON.parse(JSON.stringify(usersForWidget));
   dispatch({
-    type: ADD_USER,
+    type: 'ADD_USER',
     payload: userData,
   });
 });

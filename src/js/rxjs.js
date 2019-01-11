@@ -1,15 +1,15 @@
 import store from '../store/createStore';
 import { addUserAction } from '../store/action';
 
-const testUser = {
-  login: 'Vladimir',
-  avatarUrl: '#',
-  htmlUrl: '#',
-  name: 'qqqz',
-  location: 'qsdfa',
-  email: 'asda',
-  id: 20,
-};
+// const testUser = {
+//   login: 'Vladimir',
+//   avatarUrl: '#',
+//   htmlUrl: '#',
+//   name: 'qqqz',
+//   location: 'qsdfa',
+//   email: 'asda',
+//   id: 20,
+// };
 
 // const countUsersList = 3;
 const userTemplate = (avatar, name, location, email) => ` 
@@ -44,21 +44,21 @@ $(document).ready(() => {
       renderBlock(avatar, name, location, email);
     });
   }
-  function addItem() {
-    store.dispatch({ type: 'ADD_USER', payload: testUser });
-  }
+  // function addItem() {
+  //   store.dispatch({ type: 'ADD_USER', payload: testUser });
+  // }
 
   // function deleteItem() {
   //   store.dispatch({ type: 'DELETE_USER', payload: 20 });
   // }
 
-  addItem();
+  // addItem();
   loadStore();
 
   function addUser() {
     store.dispatch(addUserAction());
   }
-  console.log(addUser());
+  addUser();
 
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
