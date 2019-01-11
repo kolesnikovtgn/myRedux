@@ -11,7 +11,7 @@ const dummyUser = {
   id: 20,
 };
 
-const countUsersList = 3;
+ const countUsersList = 3;
 const randomNumber = a => Math.floor(Math.random() * a);
 const userTemplate = (avatar, name, location, email) => ` 
 <div class="main__user-block container-row">
@@ -48,18 +48,18 @@ $(document).ready(() => {
     store.dispatch({ type: 'ADD_USER', payload: dummyUser });
   }
 
-  function deleteItem() {
-    store.dispatch({ type: 'DELETE_USER', payload: 20 });
-  }
+  // function deleteItem() {
+  //   store.dispatch({ type: 'DELETE_USER', payload: 20 });
+  // }
 
   addItem();
   loadStore();
 
-  function addUser(){
+  function addUser() {
     store.dispatch(addUserAction());
-
   }
-    addUser();
+  addUser();
+
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
     $(this)
