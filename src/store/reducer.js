@@ -8,28 +8,22 @@ import {
 const initialState = {
   userData: [
     {
+      avatar: '#',
       login: 'Vladimir',
-      avatarUrl: '#',
-      htmlUrl: '#',
-      name: 'qqqz',
       location: 'qsdfa',
       email: 'asda',
       id: 0,
     },
     {
+      avatar: '#',
       login: 'Vladimir',
-      avatarUrl: '#',
-      htmlUrl: '#',
-      name: 'qqqz',
       location: 'qsdfa',
       email: 'asda',
       id: 1,
     },
     {
+      avatar: '#',
       login: 'Vladimir',
-      avatarUrl: '#',
-      htmlUrl: '#',
-      name: 'qqqz',
       location: 'qsdfa',
       email: 'asda',
       id: 2,

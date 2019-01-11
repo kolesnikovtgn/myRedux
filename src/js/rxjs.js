@@ -1,7 +1,7 @@
 import store from '../store/createStore';
 import { addUserAction } from '../store/action';
 
-const dummyUser = {
+const testUser = {
   login: 'Vladimir',
   avatarUrl: '#',
   htmlUrl: '#',
@@ -38,13 +38,14 @@ function renderBlock(avatar, name, location, email) {
 $(document).ready(() => {
   function loadStore() {
     const currentState = store.getState();
-    console.log('currentState', currentState);
-    currentState.userData.forEach(({ name, email, location }) => {
-      renderBlock(null, name, email, location);
+    currentState.userData.forEach(({
+      avatar, name, location, email,
+    }) => {
+      renderBlock(avatar, name, location, email);
     });
   }
   function addItem() {
-    store.dispatch({ type: 'ADD_USER', payload: dummyUser });
+    store.dispatch({ type: 'ADD_USER', payload: testUser });
   }
 
   // function deleteItem() {
@@ -57,7 +58,7 @@ $(document).ready(() => {
   function addUser() {
     store.dispatch(addUserAction());
   }
-  addUser();
+  console.log(addUser());
 
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
