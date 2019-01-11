@@ -11,8 +11,7 @@ const dummyUser = {
   id: 20,
 };
 
- const countUsersList = 3;
-const randomNumber = a => Math.floor(Math.random() * a);
+// const countUsersList = 3;
 const userTemplate = (avatar, name, location, email) => ` 
 <div class="main__user-block container-row">
   <img class="main__user-block-avatar" src="${avatar}">
