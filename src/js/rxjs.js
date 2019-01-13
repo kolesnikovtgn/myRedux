@@ -12,8 +12,8 @@ import { refreshListAction } from '../store/action';
 //   id: 20,
 // };
 
-const userTemplate = (avatar, name, location, email) => ` 
-<div class="main__user-block container-row">
+const userTemplate = (avatar, name, location, email, id) => ` 
+<div class="main__user-block container-row" id="${id}">
   <img class="main__user-block-avatar" src="${avatar}">
   <div class="main__user-block-text container-column">
     <div class="main__user-block-text_name">${name}</div>
@@ -31,8 +31,8 @@ const userTemplate = (avatar, name, location, email) => `
 </div> 
 </div>`;
 
-function renderBlock(avatar, name, location, email) {
-  $('#usersBlock').prepend(userTemplate(avatar, name, location, email));
+function renderBlock(avatar, name, location, email, id) {
+  $('#usersBlock').prepend(userTemplate(avatar, name, location, email, id));
 }
 
 $(document).ready(() => {
@@ -50,15 +50,15 @@ $(document).ready(() => {
   //   store.dispatch(deleteUserAction());
   // }
 
-  // function deleteItem(id) {
-  //   store.dispatch({ type: 'DELETE_USER', payload: id });
-  // }
+  function deleteItem(id) {
+    store.dispatch({ type: 'DELETE_USER', payload: id });
+  }
 
   function refreshAllUsers() {
     const currentState = store.getState();
     $('#usersBlock').empty();
     currentState.userData.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.login);
+      renderBlock(el.avatar_url, el.login, el.login, el.login, el.id);
     });
   }
 
@@ -75,6 +75,10 @@ $(document).ready(() => {
   $('#usersBlock').on('click', '.trash', function (event) {
     event.preventDefault();
     $(this).parent().parent().remove();
+
+    // console.log($(this).parent().parent().prop('id'));
+    deleteItem($(this).parent().parent().prop('id'));
+    // addUsers();
     // console.log($(this).parent().parent().prop('id'));
   });
 
