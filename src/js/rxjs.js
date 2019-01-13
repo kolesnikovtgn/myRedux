@@ -11,7 +11,6 @@ import { addUserAction } from '../store/action';
 //   id: 20,
 // };
 
-// const countUsersList = 3;
 const userTemplate = (avatar, name, location, email) => ` 
 <div class="main__user-block container-row">
   <img class="main__user-block-avatar" src="${avatar}">
@@ -36,53 +35,40 @@ function renderBlock(avatar, name, location, email) {
 }
 
 $(document).ready(() => {
-  function loadStore() {
-    const currentState = store.getState();
-    currentState.userData.forEach(({
-      avatar, name, location, email,
-    }) => {
-      renderBlock(avatar, name, location, email);
-    });
-  }
-  // function addItem() {
-  //   store.dispatch({ type: 'ADD_USER', payload: testUser });
-  // }
 
   // function deleteItem() {
   //   store.dispatch({ type: 'DELETE_USER', payload: 20 });
   // }
-
-  // addItem();
-  loadStore();
+  
+  function refreshAllUSers() {
+    const currentState = store.getState();
+    $('#usersBlock').empty();
+    currentState.userData.forEach((el) => {
+      renderBlock(el.avatar_url, el.login, el.login, el.login);
+    });
+  }
 
   function addUser() {
     store.dispatch(addUserAction());
   }
-  addUser();
 
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
-    $(this)
-      .parent()
-      .siblings('.main__user-block-trash')
-      .toggle('not-active');
-    $(this)
-      .parent()
-      .siblings('img')
-      .toggle('.margin-left');
+    $(this).parent().siblings('.main__user-block-trash').toggle('.not-active');
+    $(this).parent().siblings('img').toggle('.margin-left');
   });
+
   $('#usersBlock').on('click', '.trash', function (event) {
     event.preventDefault();
-    $(this)
-      .parent()
-      .parent()
-      .remove();
-    console.log(
-      $(this)
-        .parent()
-        .parent()
-        .prop('id'),
-    );
+    $(this).parent().parent().remove();
+    // console.log($(this).parent().parent().prop('id'));
   });
-  store.subscribe(loadStore);
+
+  $('.refresh').on('click', function() {
+    console.log('refresh button is click');
+    addUser();
+  });
+  
+  addUser();
+  store.subscribe(refreshAllUSers);
 });
