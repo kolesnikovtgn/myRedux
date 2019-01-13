@@ -1,5 +1,6 @@
 import store from '../store/createStore';
-import { addUserAction } from '../store/action';
+import { refreshListAction } from '../store/action';
+// import { deleteUserAction } from '../store/action';
 
 // const testUser = {
 //   login: 'Vladimir',
@@ -40,7 +41,20 @@ $(document).ready(() => {
   //   store.dispatch({ type: 'DELETE_USER', payload: 20 });
   // }
   
-  function refreshAllUSers() {
+  // function addOneUserAfterDelete() {
+  //   const currentState = store.getState();
+  //   renderBlock(currentState.userData.avatar_url, currentState.userData.login, currentState.userData.login, currentState.userData.login);
+  // }
+
+  // function deleteOneUser() {
+  //   store.dispatch(deleteUserAction());
+  // }
+
+  // function deleteItem(id) {
+  //   store.dispatch({ type: 'DELETE_USER', payload: id });
+  // }
+
+  function refreshAllUsers() {
     const currentState = store.getState();
     $('#usersBlock').empty();
     currentState.userData.forEach((el) => {
@@ -48,8 +62,8 @@ $(document).ready(() => {
     });
   }
 
-  function addUser() {
-    store.dispatch(addUserAction());
+  function addUsers() {
+    store.dispatch(refreshListAction());
   }
 
   $('#usersBlock').on('click', '.arrow', function (event) {
@@ -66,9 +80,10 @@ $(document).ready(() => {
 
   $('.refresh').on('click', function() {
     console.log('refresh button is click');
-    addUser();
+    addUsers();
   });
   
-  addUser();
-  store.subscribe(refreshAllUSers);
+  addUsers();
+  store.subscribe(refreshAllUsers);
+  store.subscribe(addOneUserAfterDelete);
 });

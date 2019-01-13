@@ -3,7 +3,7 @@ export const DELETE_USER = 'DELETE_USER';
 
 const randomNumber = a => Math.floor(Math.random() * a);
 
-export const addUserAction = payload => (dispatch, getState) => $.ajax({
+export const refreshListAction = payload => (dispatch, getState) => $.ajax({
     // eslint-disable-line
   method: 'GET',
   url: `https://api.github.com/users?since=${randomNumber(500)}`,
@@ -18,4 +18,18 @@ export const addUserAction = payload => (dispatch, getState) => $.ajax({
     type: 'REFRESH_LIST',
     payload: userData,
   });
+});
+
+export const deleteUserAction = payload => (dispatch, getState) => $.ajax({
+  // eslint-disable-line
+method: 'GET',
+url: `https://api.github.com/users?since=${randomNumber(500)}`,
+}).then((data) => {
+const usersForWidget = data[randomNumber(data.length)];
+
+const userData = JSON.parse(JSON.stringify(usersForWidget));
+dispatch({
+  type: 'DELETE_USER',
+  payload: userData,
+});
 });
