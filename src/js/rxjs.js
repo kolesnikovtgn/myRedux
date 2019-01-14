@@ -1,16 +1,5 @@
 import store from '../store/createStore';
 import { refreshListAction } from '../store/action';
-// import { deleteUserAction } from '../store/action';
-
-// const testUser = {
-//   login: 'Vladimir',
-//   avatarUrl: '#',
-//   htmlUrl: '#',
-//   name: 'qqqz',
-//   location: 'qsdfa',
-//   email: 'asda',
-//   id: 20,
-// };
 
 const userTemplate = (avatar, name, location, email, id) => ` 
 <div class="main__user-block container-row" id="${id}">
@@ -36,23 +25,9 @@ function renderBlock(avatar, name, location, email, id) {
 }
 
 $(document).ready(() => {
-
-  // function deleteItem() {
-  //   store.dispatch({ type: 'DELETE_USER', payload: 20 });
+  // function deleteItem(id) {
+  //   store.dispatch({ type: 'DELETE_USER', payload: id });
   // }
-  
-  // function addOneUserAfterDelete() {
-  //   const currentState = store.getState();
-  //   renderBlock(currentState.userData.avatar_url, currentState.userData.login, currentState.userData.login, currentState.userData.login);
-  // }
-
-  // function deleteOneUser() {
-  //   store.dispatch(deleteUserAction());
-  // }
-
-  function deleteItem(id) {
-    store.dispatch({ type: 'DELETE_USER', payload: id });
-  }
 
   function refreshAllUsers() {
     const currentState = store.getState();
@@ -74,20 +49,16 @@ $(document).ready(() => {
 
   $('#usersBlock').on('click', '.trash', function (event) {
     event.preventDefault();
+    // deleteItem($(this).parent().parent().prop('id'));
+    // console.log($(this).parent().parent().prop('id'));
     $(this).parent().parent().remove();
-
-    // console.log($(this).parent().parent().prop('id'));
-    deleteItem($(this).parent().parent().prop('id'));
-    // addUsers();
-    // console.log($(this).parent().parent().prop('id'));
+    // console.log(store.getState());
   });
 
-  $('.refresh').on('click', function() {
-    console.log('refresh button is click');
+  $('.refresh').on('click', () => {
     addUsers();
   });
-  
+
   addUsers();
   store.subscribe(refreshAllUsers);
-  store.subscribe(addOneUserAfterDelete);
 });

@@ -19,17 +19,3 @@ export const refreshListAction = payload => (dispatch, getState) => $.ajax({
     payload: userData,
   });
 });
-
-export const deleteUserAction = payload => (dispatch, getState) => $.ajax({
-  // eslint-disable-line
-method: 'GET',
-url: `https://api.github.com/users?since=${randomNumber(500)}`,
-}).then((data) => {
-const usersForWidget = data[randomNumber(data.length)];
-
-const userData = JSON.parse(JSON.stringify(usersForWidget));
-dispatch({
-  type: 'DELETE_USER',
-  payload: userData,
-});
-});
