@@ -25,11 +25,11 @@ function renderBlock(avatar, name, location, email, id) {
 }
 
 $(document).ready(() => {
-  // function deleteItem(id) {
-  //   store.dispatch({ type: 'DELETE_USER', payload: id });
-  // }
+  function deleteItem(id) {
+    store.dispatch({ type: 'DELETE_USER', payload: id });
+  }
 
-  function refreshAllUsers() {
+  function renderUsers() {
     const currentState = store.getState();
     $('#usersBlock').empty();
     currentState.userData.forEach((el) => {
@@ -51,8 +51,9 @@ $(document).ready(() => {
     event.preventDefault();
     // deleteItem($(this).parent().parent().prop('id'));
     // console.log($(this).parent().parent().prop('id'));
+    console.log('id in trash', $(this).parent().parent().prop('id'));
     $(this).parent().parent().remove();
-    // console.log(store.getState());
+    deleteItem(parseInt($(this).parent().parent().prop('id'), 0));
   });
 
   $('.refresh').on('click', () => {
@@ -60,5 +61,5 @@ $(document).ready(() => {
   });
 
   addUsers();
-  store.subscribe(refreshAllUsers);
+  store.subscribe(renderUsers);
 });
