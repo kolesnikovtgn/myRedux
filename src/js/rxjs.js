@@ -32,9 +32,11 @@ $(document).ready(() => {
   function renderUsers() {
     const currentState = store.getState();
     $('#usersBlock').empty();
-    currentState.userData.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.login, el.id);
-    });
+    for (let i = 0; i < 3; i += 1) {
+      renderBlock(currentState.userData[i].avatar_url, currentState.userData[i].login,
+        currentState.userData[i].login, currentState.userData[i].login,
+        currentState.userData[i].id);
+    }
   }
 
   function addUsers() {
@@ -49,9 +51,6 @@ $(document).ready(() => {
 
   $('#usersBlock').on('click', '.trash', function (event) {
     event.preventDefault();
-    // deleteItem($(this).parent().parent().prop('id'));
-    // console.log($(this).parent().parent().prop('id'));
-    console.log('id in trash', $(this).parent().parent().prop('id'));
     $(this).parent().parent().remove();
     deleteItem(parseInt($(this).parent().parent().prop('id'), 0));
   });
