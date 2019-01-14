@@ -1,13 +1,8 @@
-const Rx = require('rxjs/Rx');
-// eslint-disable-next-line prefer-destructuring
-const map = require('rxjs/operators/map').map;
-// eslint-disable-next-line prefer-destructuring
-const mergeMap = require('rxjs/operators/mergeMap').mergeMap;
-// eslint-disable-next-line prefer-destructuring
+import store from '../store/createStore';
+import { refreshListAction } from '../store/action';
 
-const countUsersList = 3;
-const userTemplate = (avatar, name, location, email) => ` 
-<div class="main__user-block container-row">
+const userTemplate = (avatar, name, location, email, id) => ` 
+<div class="main__user-block container-row" id="${id}">
   <img class="main__user-block-avatar" src="${avatar}">
   <div class="main__user-block-text container-column">
     <div class="main__user-block-text_name">${name}</div>
@@ -25,86 +20,45 @@ const userTemplate = (avatar, name, location, email) => `
 </div> 
 </div>`;
 
-function renderBlock(avatar, name, location, email) {
-  $('#usersBlock').prepend(userTemplate(avatar, name, location, email));
+function renderBlock(avatar, name, location, email, id) {
+  $('#usersBlock').prepend(userTemplate(avatar, name, location, email, id));
 }
 
 $(document).ready(() => {
-  const refreshButton = $('.refresh');
-  const refreshClick$ = Rx.Observable.fromEvent(refreshButton, 'click');
-  const arrowClick$ = Rx.Observable.fromEventPattern(
-    (handler) => {
-      $('#usersBlock').on('click', '.arrow', handler);
-    },
-    (handler) => {
-      $('#usersBlock').off('click', '.arrow', handler);
-    },
-  );
+  function deleteItem(id) {
+    store.dispatch({ type: 'DELETE_USER', payload: id });
+  }
 
-  const trashClick$ = Rx.Observable.fromEventPattern(
-    (handler) => {
-      $('#usersBlock').on('click', '.trash', handler);
-    },
-    (handler) => {
-      $('#usersBlock').off('click', '.trash', handler);
-    },
-  );
-
-  arrowClick$.subscribe((e) => {
-    $(e.target).parent().siblings('.main__user-block-trash')
-      .toggle('not-active');
-    $(e.target).parent().siblings('img')
-      .toggle('.margin-left');
-  });
-
-  trashClick$.subscribe((e) => {
-    $(e.target).parent().parent().remove();
-  });
-
-  const requestTrash$ = trashClick$.pipe(
-    map(() => {
-      const randomNumber = Math.floor(Math.random() * 500);
-      return ` https://api.github.com/users?since=${randomNumber}`;
-    }),
-  );
-  const responseTrash$ = requestTrash$.pipe(
-    mergeMap(requestUrl => Rx.Observable.fromPromise($.getJSON(requestUrl))),
-    map((listUsers) => {
-      const renderUsersList = [];
-      for (let i = 0; i < 1; i += 1) {
-        renderUsersList.push(listUsers[Math.floor(Math.random() * listUsers.length)]);
-      }
-      return renderUsersList;
-    }),
-  );
-
-  responseTrash$.subscribe((res) => {
-    res.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.id);
-    });
-  });
-
-  const request$ = refreshClick$.startWith('startup click')
-    .map(() => {
-      const randomNumber = Math.floor(Math.random() * 500);
-      return `https://api.github.com/users?since=${randomNumber}`;
-    });
-
-  const response$ = request$.pipe(
-    mergeMap(requestUrl => Rx.Observable.fromPromise($.getJSON(requestUrl))),
-    map((listUsers) => {
-      const renderUsersList = [];
-      for (let i = 0; i < countUsersList; i += 1) {
-        renderUsersList.push(listUsers[Math.floor(Math.random() * listUsers.length)]);
-      }
-      return renderUsersList;
-    }),
-  );
-
-  response$.subscribe((res) => {
+  function renderUsers() {
+    const currentState = store.getState();
     $('#usersBlock').empty();
-    res.forEach((el) => {
-      renderBlock(el.avatar_url, el.login, el.login, el.id);
-    });
+    for (let i = 0; i < 3; i += 1) {
+      renderBlock(currentState.userData[i].avatar_url, currentState.userData[i].login,
+        currentState.userData[i].login, currentState.userData[i].login,
+        currentState.userData[i].id);
+    }
+  }
+
+  function addUsers() {
+    store.dispatch(refreshListAction());
+  }
+
+  $('#usersBlock').on('click', '.arrow', function (event) {
+    event.preventDefault();
+    $(this).parent().siblings('.main__user-block-trash').toggle('.not-active');
+    $(this).parent().siblings('img').toggle('.margin-left');
   });
+
+  $('#usersBlock').on('click', '.trash', function (event) {
+    event.preventDefault();
+    $(this).parent().parent().remove();
+    deleteItem(parseInt($(this).parent().parent().prop('id'), 0));
+  });
+
+  $('.refresh').on('click', () => {
+    addUsers();
+  });
+
+  addUsers();
+  store.subscribe(renderUsers);
 });
