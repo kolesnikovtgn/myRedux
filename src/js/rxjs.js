@@ -22,6 +22,7 @@ const userTemplate = (avatar, name, location, email, id) => `
 
 function renderBlock(avatar, name, location, email, id) {
   $('#usersBlock').prepend(userTemplate(avatar, name, location, email, id));
+  console.log($('#usersBlock').)
 }
 
 $(document).ready(() => {
@@ -43,10 +44,16 @@ $(document).ready(() => {
     store.dispatch(refreshListAction());
   }
 
+  // $('#usersBlock').on('click', '.arrow', function (event) {
+  //   event.preventDefault();
+  //   $(this).parent().siblings('.main__user-block-trash').toggle('.not-active');
+  //   $(this).parent().siblings('img').toggle('.margin-left');
+  // });
+
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
-    $(this).parent().siblings('.main__user-block-trash').toggle('.not-active');
-    $(this).parent().siblings('img').toggle('.margin-left');
+    let $awesome = $(this).parent().parent();
+    store.dispatch({ type: 'ARROW_CLICK', id: $awesome.prop('id')});
   });
 
   $('#usersBlock').on('click', '.trash', function (event) {
