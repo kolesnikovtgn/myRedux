@@ -40,7 +40,7 @@ html {
     display: none;
 }
 .margin-left {
-    margin-left: -60px;
+    margin-left: -60px!important;
 }
 
 .main {
@@ -74,7 +74,8 @@ html {
             width: 72px;
             height: 72px;
             border-radius: 50%;
-            margin: 20px 0 0 10px;
+            margin-top: 20px;
+            margin-left: 10px;
         }
         &-text {
             flex: none;
@@ -82,7 +83,7 @@ html {
             margin: 25px 0 0 14px;
             &_name {
                 font-size: 2.4rem;
-            }    
+            }
             &_location {
                 font-size: 1.4rem;
                 &-text {
@@ -107,11 +108,11 @@ html {
             background-color: $trash-theme;
             & i {
                 display: flex;
-                justify-content: center;   
+                justify-content: center;
                 margin-top: 30%;
             }
         }
-    }  
+    }
     &__footer {
         width: 100%;
         height: 37px;
@@ -123,5 +124,5 @@ html {
             font-size: 1.8rem;
             margin-left: 8px;
         }
-    }   
+    }
 }
