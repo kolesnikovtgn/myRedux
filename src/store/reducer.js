@@ -42,14 +42,6 @@ export default function githubApp(state = initialState, action) {
     case DELETE_USER:
       return { ...state, userData: state.userData.filter(item => item.id !== action.payload) };
     case ARROW_CLICK:
-      // return {
-      //   ...state,
-      //   userData: state.userData.forEach((item) => {
-      //     if (item.id === action.payload) {
-      //       item.arrowStatus = !item.arrowStatus;
-      //     }
-      //   }),
-      // };
       return {
         ...state,
         userData: state.userData.map(item => ((item.id === action.payload)

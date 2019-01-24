@@ -42,8 +42,10 @@ const userTemplateArrow = (avatar, name, location, email, id) => `
 function renderBlock(avatar, name, location, email, id, status) {
 // eslint-disable-next-line no-unused-expressions
   status
-    ? $('#usersBlock').prepend(userTemplateArrow(avatar, name, location, email, id))
-    : $('#usersBlock').prepend(userTemplate(avatar, name, location, email, id));
+    ? $('#usersBlock')
+      .prepend(userTemplateArrow(avatar, name, location, email, id))
+    : $('#usersBlock')
+      .prepend(userTemplate(avatar, name, location, email, id));
 }
 
 $(document).ready(() => {
@@ -68,13 +70,6 @@ $(document).ready(() => {
   function addUsers() {
     store.dispatch(refreshListAction());
   }
-
-  // $('#usersBlock').on('click', '.arrow', function (event) {
-  //   event.preventDefault();
-  //   $(this).parent().siblings('.main__user-block-trash').toggle('.not-active');
-  //   $(this).parent().siblings('img').toggle('.margin-left');
-  // });
-
   // eslint-disable-next-line func-names
   $('#usersBlock').on('click', '.arrow', function (event) {
     event.preventDefault();
